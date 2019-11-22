@@ -30,12 +30,10 @@ class FluxMapState {
   DeviceNetworkStatusChangeCallback onDeviceOffline;
   DeviceNetworkStatusChangeCallback onDeviceBackOnline;
 
-  final Map<int, Device> _devices = <int, Device>{};
+  Map<int, Device> devices = <int, Device>{};
   bool firstPositionUpdateDone = false;
   final _firstPositionUpdateForDevices = <int>[];
   final _markersRebuildSignal = PublishSubject<bool>();
-
-  Map<int, Device> get devices => _devices;
 
   // **********************************
   // Status loop
@@ -43,12 +41,12 @@ class FluxMapState {
 
   void checkDevicesStatus() {
     /// rebuild markers if a device status has changed
-    for (final device in _devices.values) {
+    for (final device in devices.values) {
       final current = device.networkStatus;
       final last =
           device.properties["last_network_status"] as DeviceNetworkStatus;
       //print(
-      //    "${_devices.length} Device ${device.id} / $dns / ${device.networkStatus}");
+      //    "${devices.length} Device ${device.id} / $dns / ${device.networkStatus}");
       switch (last == current) {
         case false:
           // watch state changes for callbacks to trigger
@@ -102,8 +100,8 @@ class FluxMapState {
     }
     // check if the device object is known
     Device device;
-    if (_devices.containsKey(_device.id)) {
-      device = _devices[_device.id]
+    if (devices.containsKey(_device.id)) {
+      device = devices[_device.id]
         ..position = _device.position
         ..batteryLevel = _device.batteryLevel;
     } else {
@@ -111,7 +109,7 @@ class FluxMapState {
         //..sleepingTimeout = defaultSleepingTimeout
         //..keepAlive = defaultKeepAlive
         ..properties["last_network_status"] = _device.networkStatus;
-      _devices[device.id] = device;
+      devices[device.id] = device;
     }
     _markersRebuildSignal.sink.add(true);
     // init stoff
@@ -123,7 +121,7 @@ class FluxMapState {
     }
     // fit markers on map if first launch
     if (!firstPositionUpdateDone) {
-      if (_firstPositionUpdateForDevices.length == _devices.length) {
+      if (_firstPositionUpdateForDevices.length == devices.length) {
         //unawaited(map.fitMarkers());
         firstPositionUpdateDone = true;
       }
@@ -132,7 +130,7 @@ class FluxMapState {
 
   void _rebuildMarkers() {
     final m = <String, Marker>{};
-    _devices.forEach((id, d) {
+    devices.forEach((id, d) {
       if (markerBuilder == null) {
         m["$id"] = defaultMarkerBuilder(d, markerGestureDetectorBuilder);
       } else {
