@@ -17,8 +17,7 @@ dependencies:
     path: ../persistent_state
   device:
     path: ../../../dart/device
-  map_controller:
-    path: ../map_controller
+  map_controller: ^0.5.0
   err:
     path: ../err
 
