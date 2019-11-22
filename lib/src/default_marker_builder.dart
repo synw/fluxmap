@@ -24,9 +24,9 @@ Marker defaultMarkerBuilder(
     markerIcon = Icons.edit_location;
   }
   return Marker(
-      anchorPos: AnchorPos.align(AnchorAlign.left),
-      width: 120.0,
-      height: 110.0,
+      anchorPos: AnchorPos.align(AnchorAlign.top),
+      width: 60.0,
+      height: 56.0,
       point: device.position.point,
       builder: (BuildContext context) {
         if (markerGestureDetectorBuilder != null) {
