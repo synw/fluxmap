@@ -69,8 +69,8 @@ class _FluxMapWidgetState extends State<FluxMapWidget> {
           center: state?.center ?? center,
           zoom: state?.zoom ?? zoom,
           onPositionChanged: (position, hasGesture) {
-            print("POS CHANGE $position / $hasGesture");
-            print("BOUNDS: ${state.map.center}/${state.map.zoom}");
+            //print("POS CHANGE $position / $hasGesture");
+            //print("BOUNDS: ${state.map.center}/${state.map.zoom}");
             _saveMapStateSignal.sink
                 .add(MapPosition(center: position.center, zoom: position.zoom));
           }),

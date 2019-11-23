@@ -110,10 +110,11 @@ class FluxMapState {
         ..position = _device.position
         ..batteryLevel = _device.batteryLevel;
     } else {
+      _device.properties["last_network_status"] = _device.networkStatus;
       device = _device
         //..sleepingTimeout = defaultSleepingTimeout
         //..keepAlive = defaultKeepAlive
-        ..properties["last_network_status"] = _device.networkStatus;
+        ..properties = _device.properties;
       devices[device.id] = device;
     }
     _markersRebuildSignal.sink.add(true);
