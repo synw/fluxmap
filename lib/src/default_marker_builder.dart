@@ -5,6 +5,13 @@ import 'types.dart';
 
 Marker defaultMarkerBuilder(
     Device device, MarkerGestureDetectorBuilder markerGestureDetectorBuilder) {
+  assert(device != null);
+  if (device.position == null) {
+    throw ArgumentError.notNull();
+  }
+  if (device.position.point == null) {
+    throw ArgumentError.notNull();
+  }
   Color markerColor;
   var markerIcon = Icons.location_on;
   switch (device.networkStatus) {
