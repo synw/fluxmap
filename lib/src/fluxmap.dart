@@ -7,6 +7,7 @@ import 'package:fluxmap/src/state.dart';
 import 'package:fluxmap/src/types.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'store.dart';
 
@@ -21,8 +22,10 @@ class _FluxMapWidgetState extends State<FluxMapWidget> {
   final double zoom;
 
   StreamSubscription<Device> _sub;
+  StreamSubscription<MapPosition> _ms;
   bool _updateLoopStarted = false;
   Timer t;
+  final _saveMapStateSignal = PublishSubject<MapPosition>();
 
   Future<void> _listenToFlux() async => _sub = devicesFlux.listen((device) {
         updateFluxMapState(
@@ -44,6 +47,12 @@ class _FluxMapWidgetState extends State<FluxMapWidget> {
     super.initState();
     print("MAP STATE ${fluxMapState.map}");
     fluxMapState.map.onReady.then((_) {
+      _ms = _saveMapStateSignal
+          .debounceTime(const Duration(milliseconds: 200))
+          .listen((ms) {
+        fluxMapState.center = ms.center;
+        fluxMapState.zoom = ms.zoom;
+      });
       print("MAP STATE READY");
       _listenToFlux();
       _startDeviceLoop();
@@ -53,17 +62,18 @@ class _FluxMapWidgetState extends State<FluxMapWidget> {
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<FluxMapStore>(context).state;
-    //print("STATE $state");
     //print("MAP ${state.map} / ${state.map.center}");
-    var defaultCenter = center;
-    var defaultZoom = zoom;
-    /*if (state.map.on) {
-      defaultCenter = state.map.center ?? center;
-      defaultZoom = state.map.zoom ?? zoom;
-    }*/
     return FlutterMap(
       mapController: state.map.mapController,
-      options: MapOptions(center: defaultCenter, zoom: defaultZoom),
+      options: MapOptions(
+          center: state?.center ?? center,
+          zoom: state?.zoom ?? zoom,
+          onPositionChanged: (position, hasGesture) {
+            print("POS CHANGE $position / $hasGesture");
+            print("BOUNDS: ${state.map.center}/${state.map.zoom}");
+            _saveMapStateSignal.sink
+                .add(MapPosition(center: position.center, zoom: position.zoom));
+          }),
       layers: [
         TileLayerOptions(
             urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -78,6 +88,7 @@ class _FluxMapWidgetState extends State<FluxMapWidget> {
   @override
   void dispose() {
     _sub.cancel();
+    _ms.cancel();
     t.cancel();
     super.dispose();
   }

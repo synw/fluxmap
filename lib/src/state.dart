@@ -1,7 +1,9 @@
 import 'package:device/device.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:map_controller/map_controller.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:latlong/latlong.dart';
 
 import 'default_marker_builder.dart';
 import 'defaults_settings.dart';
@@ -30,10 +32,13 @@ class FluxMapState {
   DeviceNetworkStatusChangeCallback onDeviceOffline;
   DeviceNetworkStatusChangeCallback onDeviceBackOnline;
 
-  Map<int, Device> devices = <int, Device>{};
-  bool firstPositionUpdateDone = false;
   final _firstPositionUpdateForDevices = <int>[];
   final _markersRebuildSignal = PublishSubject<bool>();
+
+  Map<int, Device> devices = <int, Device>{};
+  bool firstPositionUpdateDone = false;
+  LatLng center;
+  double zoom;
 
   // **********************************
   // Status loop
@@ -114,9 +119,6 @@ class FluxMapState {
     _markersRebuildSignal.sink.add(true);
     // init stoff
     if (!_firstPositionUpdateForDevices.contains(device.id)) {
-      /*if (tracedDevices.contains(device.id)) {
-        setTraceDevice(device, true);
-      }*/
       _firstPositionUpdateForDevices.add(device.id);
     }
     // fit markers on map if first launch
