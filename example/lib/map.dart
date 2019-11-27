@@ -27,6 +27,8 @@ class _MapPageState extends State<MapPage> {
             log.flash("Device ${device.name} is offline"),
         onDeviceBackOnline: (device) =>
             log.flash("Device ${device.name} is back online"),
+        markerHeight: 85.0,
+        markerWidth: 100.0,
         markerGestureDetectorBuilder: (context, device, child) {
           return GestureDetector(
               child: child,
