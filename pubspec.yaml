@@ -8,18 +8,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  pedantic: ^1.6.0
+  pedantic: ^1.7.0
   extra_pedantic: ^1.1.1+3
   flutter_map: ^0.7.3
   provider: ^3.1.0+1
   rxdart: ^0.22.6
-  persistent_state:
-    path: ../persistent_state
-  device:
-    path: ../../../dart/device
+  device: ^0.1.0
   map_controller: ^0.5.0
-  err:
-    path: ../err
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
