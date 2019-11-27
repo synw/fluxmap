@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'map.dart';
 
-final routes = {
+final Map<String, MapPage Function(BuildContext)> routes = {
   '/': (BuildContext context) => MapPage(),
 };
 
