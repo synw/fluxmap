@@ -29,7 +29,7 @@ class FluxMapStore {
         assert(value != null);
         final v = value as Device;
         assert(v.position != null);
-        state.updateDevicePosition(v, verbose: true);
+        state.updateDevicePosition(v);
         break;
       case FluxMapUpdateType.devicesStatus:
         state.checkDevicesStatus();

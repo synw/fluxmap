@@ -13,13 +13,17 @@ import 'store.dart';
 
 class _FluxMapWidgetState extends State<FluxMapWidget> {
   _FluxMapWidgetState(
-      {@required this.devicesFlux, this.center, this.zoom = 2.0}) {
+      {@required this.devicesFlux,
+      this.center,
+      this.zoom = 2.0,
+      this.networkStatusLoop = true}) {
     center ??= LatLng(0.0, 0.0);
   }
 
   final Stream<Device> devicesFlux;
   LatLng center;
   final double zoom;
+  final bool networkStatusLoop;
 
   StreamSubscription<Device> _sub;
   StreamSubscription<MapPosition> _ms;
@@ -55,7 +59,9 @@ class _FluxMapWidgetState extends State<FluxMapWidget> {
       });
       print("MAP STATE READY");
       _listenToFlux();
-      _startDeviceLoop();
+      if (networkStatusLoop) {
+        _startDeviceLoop();
+      }
     });
   }
 
@@ -95,21 +101,30 @@ class _FluxMapWidgetState extends State<FluxMapWidget> {
 }
 
 class FluxMapWidget extends StatefulWidget {
-  const FluxMapWidget({@required this.devicesFlux, this.center, this.zoom});
+  const FluxMapWidget(
+      {@required this.devicesFlux,
+      this.networkStatusLoop,
+      this.center,
+      this.zoom});
 
   final Stream<Device> devicesFlux;
   final LatLng center;
   final double zoom;
+  final bool networkStatusLoop;
 
   @override
-  _FluxMapWidgetState createState() =>
-      _FluxMapWidgetState(devicesFlux: devicesFlux, center: center, zoom: zoom);
+  _FluxMapWidgetState createState() => _FluxMapWidgetState(
+      devicesFlux: devicesFlux,
+      networkStatusLoop: networkStatusLoop,
+      center: center,
+      zoom: zoom);
 }
 
 class FluxMap extends StatefulWidget {
   const FluxMap(
       {@required this.devicesFlux,
       @required this.state,
+      this.networkStatusLoop = true,
       this.center,
       this.zoom = 2.0});
 
@@ -117,16 +132,22 @@ class FluxMap extends StatefulWidget {
   final FluxMapState state;
   final LatLng center;
   final double zoom;
+  final bool networkStatusLoop;
 
   @override
   _FluxMapState createState() => _FluxMapState(
-      devicesFlux: devicesFlux, state: state, center: center, zoom: zoom);
+      devicesFlux: devicesFlux,
+      networkStatusLoop: networkStatusLoop,
+      state: state,
+      center: center,
+      zoom: zoom);
 }
 
 class _FluxMapState extends State<FluxMap> {
   _FluxMapState(
       {@required this.devicesFlux,
       @required this.state,
+      this.networkStatusLoop,
       this.center,
       this.zoom}) {
     fluxMapState = state;
@@ -136,6 +157,7 @@ class _FluxMapState extends State<FluxMap> {
   final FluxMapState state;
   final LatLng center;
   final double zoom;
+  final bool networkStatusLoop;
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +166,7 @@ class _FluxMapState extends State<FluxMap> {
         value: fluxMapStoreController.stream,
         child: FluxMapWidget(
           devicesFlux: devicesFlux,
+          networkStatusLoop: networkStatusLoop,
           center: center,
           zoom: zoom,
         ));

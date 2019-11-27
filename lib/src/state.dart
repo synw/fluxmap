@@ -14,6 +14,9 @@ class FluxMapState {
       {this.map,
       this.markerBuilder,
       this.markerGestureDetectorBuilder,
+      this.markerWidth = 60.0,
+      this.markerHeight = 56.0,
+      this.alignMarker = AnchorAlign.top,
       this.onDeviceDisconnect,
       this.onDeviceOffline,
       this.onDeviceBackOnline}) {
@@ -28,6 +31,9 @@ class FluxMapState {
   StatefulMapController map;
   MarkerGestureDetectorBuilder markerGestureDetectorBuilder;
   FluxMarkerBuilder markerBuilder;
+  double markerWidth;
+  double markerHeight;
+  AnchorAlign alignMarker;
   DeviceNetworkStatusChangeCallback onDeviceDisconnect;
   DeviceNetworkStatusChangeCallback onDeviceOffline;
   DeviceNetworkStatusChangeCallback onDeviceBackOnline;
@@ -135,7 +141,8 @@ class FluxMapState {
     final m = <String, Marker>{};
     devices.forEach((id, d) {
       if (markerBuilder == null) {
-        m["$id"] = defaultMarkerBuilder(d, markerGestureDetectorBuilder);
+        m["$id"] = defaultMarkerBuilder(d, markerGestureDetectorBuilder,
+            markerWidth, markerHeight, alignMarker);
       } else {
         m["$id"] = markerBuilder(d);
       }

@@ -4,7 +4,11 @@ import 'package:flutter_map/flutter_map.dart';
 import 'types.dart';
 
 Marker defaultMarkerBuilder(
-    Device device, MarkerGestureDetectorBuilder markerGestureDetectorBuilder) {
+    Device device,
+    MarkerGestureDetectorBuilder markerGestureDetectorBuilder,
+    double width,
+    double height,
+    AnchorAlign align) {
   assert(device != null);
   if (device.position == null) {
     throw ArgumentError.notNull();
@@ -31,9 +35,9 @@ Marker defaultMarkerBuilder(
     markerIcon = Icons.edit_location;
   }
   return Marker(
-      anchorPos: AnchorPos.align(AnchorAlign.top),
-      width: 60.0,
-      height: 56.0,
+      anchorPos: AnchorPos.align(align),
+      width: width,
+      height: height,
       point: device.position.point,
       builder: (BuildContext context) {
         if (markerGestureDetectorBuilder != null) {
