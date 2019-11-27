@@ -20,3 +20,4 @@ linter:
     - constant_identifier_names
     - cascade_invocations
     - omit_local_variable_types
+    - public_member_api_docs
