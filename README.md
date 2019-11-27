@@ -1,5 +1,7 @@
 # Fluxmap
 
+[![Build Status](https://travis-ci.org/synw/fluxmap.svg?branch=master)](https://travis-ci.org/synw/fluxmap)
+
 A map to handle real time location updates for multiple devices. The map takes a
 stream of [Device](https://github.com/synw/device) objects for input and manages
 their state on the map
