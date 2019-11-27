@@ -2,13 +2,30 @@ import 'package:device/device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 
-enum FluxMapUpdateType { devicePosition, devicesStatus }
+/// The type of possible state updates
+enum FluxMapUpdateType {
+  /// Update a device position
+  devicePosition,
 
-enum SpeedUnit { kilometersPerHour, knots }
+  /// Update a device status
+  devicesStatus
+}
 
+/// Speed units
+enum SpeedUnit {
+  /// km/h
+  kilometersPerHour,
+
+  /// knots
+  knots
+}
+
+/// A marker builder
 typedef FluxMarkerBuilder = Marker Function(Device device);
 
+/// Callback on network status change
 typedef DeviceNetworkStatusChangeCallback = void Function(Device device);
 
+/// Gesture detector builder for markers
 typedef MarkerGestureDetectorBuilder = Widget Function(
     BuildContext context, Device device, Widget child);

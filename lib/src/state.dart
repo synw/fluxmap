@@ -1,15 +1,16 @@
 import 'package:device/device.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:map_controller/map_controller.dart';
-import 'package:pedantic/pedantic.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:latlong/latlong.dart';
+import 'package:map_controller/map_controller.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'default_marker_builder.dart';
 import 'defaults_settings.dart';
 import 'types.dart';
 
+/// The state of the map
 class FluxMapState {
+  /// Default constructor
   FluxMapState(
       {this.map,
       this.markerBuilder,
@@ -28,30 +29,54 @@ class FluxMapState {
     });
   }
 
+  /// The map controller
   StatefulMapController map;
+
+  /// A builder for marker gestures
   MarkerGestureDetectorBuilder markerGestureDetectorBuilder;
+
+  /// A builder for markers updates
   FluxMarkerBuilder markerBuilder;
+
+  /// The width of a marker
   double markerWidth;
+
+  /// The height of a marker
   double markerHeight;
+
+  /// The alignment of a marker
   AnchorAlign alignMarker;
+
+  /// A callback for when a device disconnect
   DeviceNetworkStatusChangeCallback onDeviceDisconnect;
+
+  /// A callback for when a device goes offline
   DeviceNetworkStatusChangeCallback onDeviceOffline;
+
+  /// A callback for when a device comes back online
   DeviceNetworkStatusChangeCallback onDeviceBackOnline;
 
   final _firstPositionUpdateForDevices = <int>[];
   final _markersRebuildSignal = PublishSubject<bool>();
 
+  /// All the devices
   Map<int, Device> devices = <int, Device>{};
+
+  /// The first position update
   bool firstPositionUpdateDone = false;
+
+  /// Initial center on the map
   LatLng center;
+
+  /// Initial zoom on the map
   double zoom;
 
   // **********************************
   // Status loop
   // **********************************
 
+  /// rebuild markers if a device status has changed
   void checkDevicesStatus() {
-    /// rebuild markers if a device status has changed
     for (final device in devices.values) {
       final current = device.networkStatus;
       final last =
@@ -93,6 +118,7 @@ class FluxMapState {
   // Position
   // **********************************
 
+  /// Update devices position actions
   Future<void> updateDevicePosition(Device _device,
       {SpeedUnit speedUnit = SpeedUnit.kilometersPerHour,
       bool verbose = false}) async {
@@ -137,6 +163,13 @@ class FluxMapState {
     }
   }
 
+  /// Finish using
+  void dispose() => _markersRebuildSignal.close();
+
+  // **********************************
+  // Internal methods
+  // **********************************
+
   void _rebuildMarkers() {
     final m = <String, Marker>{};
     devices.forEach((id, d) {
@@ -149,34 +182,4 @@ class FluxMapState {
     });
     map.addMarkers(markers: m);
   }
-
-  // **********************************
-  // Internal methods
-  // **********************************
-/*
-  void _addAliveDevice(int deviceId) {
-    final ad = aliveDevices;
-    if (!ad.contains(deviceId)) {
-      ad.add(deviceId);
-    }
-    aliveDevices = ad;
-  }
-
-  void _addVisibleDevice(int deviceId) {
-    final vd = visibleDevices;
-    if (!vd.contains(deviceId)) {
-      vd.add(deviceId);
-    }
-    visibleDevices = vd;
-  }
-
-  void _addSleepingDevice(int deviceId) {
-    final sd = sleepingDevices;
-    if (!sd.contains(deviceId)) {
-      sd.add(deviceId);
-    }
-    sleepingDevices = sd;
-  }*/
-
-  void dispose() => _markersRebuildSignal.close();
 }
