@@ -50,7 +50,7 @@ class _FluxMapWidgetState extends State<_FluxMapWidget> {
   @override
   void initState() {
     super.initState();
-    print("MAP STATE ${fluxMapState.map}");
+    //print("MAP STATE ${fluxMapState.map}");
     fluxMapState.map.onReady.then((_) {
       _ms = _saveMapStateSignal
           .debounceTime(const Duration(milliseconds: 200))
@@ -58,7 +58,7 @@ class _FluxMapWidgetState extends State<_FluxMapWidget> {
         fluxMapState.center = ms.center;
         fluxMapState.zoom = ms.zoom;
       });
-      print("MAP STATE READY");
+      //print("MAP STATE READY");
       _listenToFlux();
       if (networkStatusLoop) {
         _startDeviceLoop();
@@ -82,9 +82,7 @@ class _FluxMapWidgetState extends State<_FluxMapWidget> {
                 .add(MapPosition(center: position.center, zoom: position.zoom));
           }),
       layers: [
-        TileLayerOptions(
-            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            subdomains: ['a', 'b', 'c']),
+        state.map.tileLayer,
         PolygonLayerOptions(polygons: state.map.polygons),
         PolylineLayerOptions(polylines: state.map.lines),
         MarkerLayerOptions(markers: state.map.markers),
@@ -96,7 +94,9 @@ class _FluxMapWidgetState extends State<_FluxMapWidget> {
   void dispose() {
     _sub.cancel();
     _ms.cancel();
-    t.cancel();
+    if (_updateLoopStarted) {
+      t.cancel();
+    }
     super.dispose();
   }
 }
