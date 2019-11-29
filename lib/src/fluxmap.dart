@@ -60,7 +60,7 @@ class _FluxMapWidgetState extends State<_FluxMapWidget> {
       });
       //print("MAP STATE READY");
       _listenToFlux();
-      if (networkStatusLoop) {
+      if (t != null) {
         _startDeviceLoop();
       }
     });
