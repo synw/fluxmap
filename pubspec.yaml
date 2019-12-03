@@ -2,7 +2,7 @@ name: fluxmap
 description: A map to handle real time location updates for multiple devices
 author: synw <ansterj@gmail.com>
 homepage: https://github.com/synw/fluxmap
-version: 0.1.0
+version: 0.1.1
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
@@ -16,7 +16,7 @@ dependencies:
   provider: ^3.2.0
   rxdart: ^0.22.6
   device: ^0.1.0
-  map_controller: ^0.5.0
+  map_controller: ^0.5.1
   geodesy: ^0.3.2
 
   # The following adds the Cupertino Icons font to your application.
