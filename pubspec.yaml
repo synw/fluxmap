@@ -1,8 +1,7 @@
 name: fluxmap
-description: A map to handle real time location updates for multiple devices
-author: synw <ansterj@gmail.com>
+description: A map to handle real time location updates for multiple devices. Automatic devices network status management
 homepage: https://github.com/synw/fluxmap
-version: 0.1.1
+version: 0.2.0
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
@@ -13,10 +12,9 @@ dependencies:
   pedantic: ^1.7.0
   extra_pedantic: ^1.1.1+3
   flutter_map: ^0.8.0
-  provider: ^3.2.0
+  provider: ^4.0.0
   rxdart: ^0.23.1
-  device:
-    path: ../../../dart/device
+  device: ^0.1.1
   geodesy: ^0.3.2
   geojson: ^0.8.0
   map_controller: ^0.6.1

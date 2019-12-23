@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0
+
+Update dependencies
+
 ## 0.1.1
 
 Fix in dispose method
