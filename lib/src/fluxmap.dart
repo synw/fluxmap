@@ -6,7 +6,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:fluxmap/src/state.dart';
 import 'package:fluxmap/src/types.dart';
 import 'package:latlong/latlong.dart';
-import 'package:map_controller/map_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
