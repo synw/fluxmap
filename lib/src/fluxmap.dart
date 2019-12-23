@@ -6,6 +6,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:fluxmap/src/state.dart';
 import 'package:fluxmap/src/types.dart';
 import 'package:latlong/latlong.dart';
+import 'package:map_controller/map_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -63,6 +64,14 @@ class _FluxMapWidgetState extends State<_FluxMapWidget> {
       if (t != null) {
         _startDeviceLoop();
       }
+      /*fluxMapState.map.changeFeed.listen((change) {
+        if (change.name != "currentPosition") {
+          print("FMAP CHANGE $change");
+          if (change.type == MapControllerChangeType.markers) {
+            print("Markers change");
+          }
+        }
+      });*/
     });
   }
 
@@ -161,7 +170,9 @@ class _FluxMapState extends State<FluxMap> {
       @required this.state,
       this.networkStatusLoop,
       this.center,
-      this.zoom}) {
+      this.zoom})
+      : assert(state != null),
+        assert(devicesFlux != null) {
     fluxMapState = state;
   }
 
