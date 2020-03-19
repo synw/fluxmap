@@ -16,7 +16,8 @@ class _FluxMapWidgetState extends State<_FluxMapWidget> {
       {@required this.devicesFlux,
       this.center,
       this.zoom = 2.0,
-      this.networkStatusLoop = true})
+      this.networkStatusLoop = true,
+      this.extraLayers = const <LayerOptions>[]})
       : assert(devicesFlux != null) {
     center ??= LatLng(0.0, 0.0);
   }
@@ -25,6 +26,7 @@ class _FluxMapWidgetState extends State<_FluxMapWidget> {
   LatLng center;
   final double zoom;
   final bool networkStatusLoop;
+  final List<LayerOptions> extraLayers;
 
   StreamSubscription<Device> _sub;
   StreamSubscription<MapPosition> _ms;
@@ -94,6 +96,7 @@ class _FluxMapWidgetState extends State<_FluxMapWidget> {
         PolygonLayerOptions(polygons: state.map.polygons),
         PolylineLayerOptions(polylines: state.map.lines),
         MarkerLayerOptions(markers: state.map.markers),
+        ...extraLayers
       ],
     );
   }
@@ -114,19 +117,22 @@ class _FluxMapWidget extends StatefulWidget {
       {@required this.devicesFlux,
       this.networkStatusLoop,
       this.center,
-      this.zoom});
+      this.zoom,
+      this.extraLayers});
 
   final Stream<Device> devicesFlux;
   final LatLng center;
   final double zoom;
   final bool networkStatusLoop;
+  final List<LayerOptions> extraLayers;
 
   @override
   _FluxMapWidgetState createState() => _FluxMapWidgetState(
       devicesFlux: devicesFlux,
       networkStatusLoop: networkStatusLoop,
       center: center,
-      zoom: zoom);
+      zoom: zoom,
+      extraLayers: extraLayers);
 }
 
 /// The main fluxmap class
@@ -137,7 +143,8 @@ class FluxMap extends StatefulWidget {
       @required this.state,
       this.networkStatusLoop = true,
       this.center,
-      this.zoom = 2.0});
+      this.zoom = 2.0,
+      this.extraLayers = const <LayerOptions>[]});
 
   /// The stream of device positions updates
   final Stream<Device> devicesFlux;
@@ -154,13 +161,17 @@ class FluxMap extends StatefulWidget {
   /// Enable the status loop
   final bool networkStatusLoop;
 
+  /// Extra map layers
+  final List<LayerOptions> extraLayers;
+
   @override
   _FluxMapState createState() => _FluxMapState(
       devicesFlux: devicesFlux,
       networkStatusLoop: networkStatusLoop,
       state: state,
       center: center,
-      zoom: zoom);
+      zoom: zoom,
+      extraLayers: extraLayers);
 }
 
 class _FluxMapState extends State<FluxMap> {
@@ -169,7 +180,8 @@ class _FluxMapState extends State<FluxMap> {
       @required this.state,
       this.networkStatusLoop,
       this.center,
-      this.zoom})
+      this.zoom,
+      this.extraLayers = const <LayerOptions>[]})
       : assert(state != null),
         assert(devicesFlux != null) {
     fluxMapState = state;
@@ -180,6 +192,7 @@ class _FluxMapState extends State<FluxMap> {
   final LatLng center;
   final double zoom;
   final bool networkStatusLoop;
+  final List<LayerOptions> extraLayers;
 
   @override
   Widget build(BuildContext context) {
@@ -191,6 +204,7 @@ class _FluxMapState extends State<FluxMap> {
           networkStatusLoop: networkStatusLoop,
           center: center,
           zoom: zoom,
+          extraLayers: extraLayers,
         ));
   }
 }
