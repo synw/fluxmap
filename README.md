@@ -14,6 +14,8 @@ from their last position report. Callbacks are available for state changes
 
 ![Screenshot](img/screenshot.gif)
 
+[View this example on the web](https://synw.github.io/fluxmap)
+
 ## Usage
 
 ### Declare state mutations actions
