@@ -22,14 +22,14 @@ class _MapPageState extends State<MapPage> {
         map: map,
         onDeviceDisconnect: (device) {
           print("DEVICE DISCONN $device");
-          setState(() => _statusMsg = "Device ${device.name} is disconnected");
+          setState(() => _statusMsg = "${device.name} is disconnected");
         },
         onDeviceOffline: (device) {
           print("DEVICE OFFL $device");
-          setState(() => _statusMsg = "Device ${device.name} is offline");
+          setState(() => _statusMsg = "${device.name} is offline");
         },
         onDeviceBackOnline: (device) =>
-            setState(() => _statusMsg = "Device ${device.name} is back online"),
+            setState(() => _statusMsg = "${device.name} is back online"),
         markerHeight: 85.0,
         markerWidth: 100.0,
         markerGestureDetectorBuilder: (context, device, child) {
@@ -108,10 +108,11 @@ class _MapPageState extends State<MapPage> {
           center: _center,
           zoom: 14.0,
           state: flux,
-          networkStatusLoop: false,
           devicesFlux: _devicesFlux.stream),
       Positioned(
-          top: 25.0, left: 25.0, child: Text(_statusMsg, textScaleFactor: 1.2))
+          bottom: 25.0,
+          left: 25.0,
+          child: Text(_statusMsg, textScaleFactor: 1.2))
     ]));
   }
 
