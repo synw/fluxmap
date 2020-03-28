@@ -1,7 +1,7 @@
 name: fluxmap
 description: A map to handle real time location updates for multiple devices. Automatic devices network status management
 homepage: https://github.com/synw/fluxmap
-version: 0.2.0
+version: 0.3.0
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
