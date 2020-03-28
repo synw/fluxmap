@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:device/device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fluxmap/fluxmap.dart';
@@ -10,24 +9,16 @@ import 'package:map_controller/map_controller.dart';
 import 'package:pedantic/pedantic.dart';
 
 class _MapPageState extends State<MapPage> {
-  final Device device = Device(
-      name: "phone 1",
-      position: GeoPoint(latitude: 0.0, longitude: 0.0, speed: 31.0));
-
   var _statusMsg = "Simulation started";
 
   _MapPageState() {
     map = StatefulMapController(mapController: MapController());
     flux = FluxMapState(
         map: map,
-        onDeviceDisconnect: (device) {
-          print("DEVICE DISCONN $device");
-          setState(() => _statusMsg = "${device.name} is disconnected");
-        },
-        onDeviceOffline: (device) {
-          print("DEVICE OFFL $device");
-          setState(() => _statusMsg = "${device.name} is offline");
-        },
+        onDeviceDisconnect: (device) =>
+            setState(() => _statusMsg = "${device.name} is disconnected"),
+        onDeviceOffline: (device) =>
+            setState(() => _statusMsg = "${device.name} is offline"),
         onDeviceBackOnline: (device) =>
             setState(() => _statusMsg = "${device.name} is back online"),
         markerHeight: 85.0,
@@ -35,15 +26,9 @@ class _MapPageState extends State<MapPage> {
         markerGestureDetectorBuilder: (context, device, child) {
           return GestureDetector(
               child: child,
-              onTap: () {
-                print("Tap $device");
-              },
-              onDoubleTap: () {
-                print("Double tap $device");
-              },
-              onLongPress: () {
-                print("Long press $device");
-              });
+              onTap: () => print("Tap $device"),
+              onDoubleTap: () => print("Double tap $device"),
+              onLongPress: () => print("Long press $device"));
         });
   }
 
@@ -56,6 +41,7 @@ class _MapPageState extends State<MapPage> {
   FluxMapState flux;
   final _center = LatLng(11.0, 0.0);
 
+  /// Mock location updates
   Future<void> startLocationUpdates() async {
     _deviceFlux1 =
         _devicesFlux.addDeviceFlux(deviceId: 1, deviceName: "device 1");
