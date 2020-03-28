@@ -62,7 +62,8 @@ class _FluxMapWidgetState extends State<_FluxMapWidget> {
       });
       //print("MAP STATE READY");
       _listenToFlux();
-      if (t != null) {
+      //print("Status loop: $networkStatusLoop");
+      if (networkStatusLoop) {
         _startDeviceLoop();
       }
       /*fluxMapState.map.changeFeed.listen((change) {

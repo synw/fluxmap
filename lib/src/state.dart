@@ -13,7 +13,7 @@ import 'types.dart';
 class FluxMapState {
   /// Default constructor
   FluxMapState(
-      {this.map,
+      {@required this.map,
       this.markerBuilder,
       this.markerGestureDetectorBuilder,
       this.markerWidth = 60.0,
@@ -83,8 +83,7 @@ class FluxMapState {
       final current = device.networkStatus;
       final last =
           device.properties["last_network_status"] as DeviceNetworkStatus;
-      //print(
-      //    "${devices.length} Device ${device.id} / $dns / ${device.networkStatus}");
+      //print("${devices.length} Device ${device.id} / ${device.networkStatus}");
       switch (last == current) {
         case false:
           // watch state changes for callbacks to trigger

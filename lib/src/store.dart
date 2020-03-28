@@ -42,6 +42,7 @@ class FluxMapStore {
         state.updateDevicePosition(v);
         break;
       case FluxMapUpdateType.devicesStatus:
+        //print("STATE update devices status");
         state.checkDevicesStatus();
     }
   }
