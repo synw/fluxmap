@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:device/device.dart';
-import 'package:err/err.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fluxmap/fluxmap.dart';
@@ -10,36 +9,40 @@ import 'package:latlong/latlong.dart';
 import 'package:map_controller/map_controller.dart';
 import 'package:pedantic/pedantic.dart';
 
-final ErrRouter log = ErrRouter(infoRoute: [ErrRoute.screen, ErrRoute.console]);
-
 class _MapPageState extends State<MapPage> {
   final Device device = Device(
       name: "phone 1",
       position: GeoPoint(latitude: 0.0, longitude: 0.0, speed: 31.0));
 
+  var _statusMsg = "Simulation started";
+
   _MapPageState() {
     map = StatefulMapController(mapController: MapController());
     flux = FluxMapState(
         map: map,
-        onDeviceDisconnect: (device) =>
-            log.flash("Device ${device.name} is disconnected"),
-        onDeviceOffline: (device) =>
-            log.flash("Device ${device.name} is offline"),
+        onDeviceDisconnect: (device) {
+          print("DEVICE DISCONN $device");
+          setState(() => _statusMsg = "Device ${device.name} is disconnected");
+        },
+        onDeviceOffline: (device) {
+          print("DEVICE OFFL $device");
+          setState(() => _statusMsg = "Device ${device.name} is offline");
+        },
         onDeviceBackOnline: (device) =>
-            log.flash("Device ${device.name} is back online"),
+            setState(() => _statusMsg = "Device ${device.name} is back online"),
         markerHeight: 85.0,
         markerWidth: 100.0,
         markerGestureDetectorBuilder: (context, device, child) {
           return GestureDetector(
               child: child,
               onTap: () {
-                log.debugFlash("Tap $device");
+                print("Tap $device");
               },
               onDoubleTap: () {
-                log.debugFlash("Double tap $device");
+                print("Double tap $device");
               },
               onLongPress: () {
-                log.debugFlash("Long press $device");
+                print("Long press $device");
               });
         });
   }
@@ -100,11 +103,16 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     print("Build map");
     return Scaffold(
-        body: FluxMap(
-            center: _center,
-            zoom: 14.0,
-            state: flux,
-            devicesFlux: _devicesFlux.stream));
+        body: Stack(children: <Widget>[
+      FluxMap(
+          center: _center,
+          zoom: 14.0,
+          state: flux,
+          networkStatusLoop: false,
+          devicesFlux: _devicesFlux.stream),
+      Positioned(
+          top: 25.0, left: 25.0, child: Text(_statusMsg, textScaleFactor: 1.2))
+    ]));
   }
 
   @override
